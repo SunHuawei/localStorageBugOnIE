@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.3.0 -->
+<title>localStorage Bug on IE | localStorageBugOnIE</title>
+<meta property="og:title" content="localStorage Bug on IE" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="https://sunhuawei.github.io/localStorageBugOnIE/" />
+<meta property="og:url" content="https://sunhuawei.github.io/localStorageBugOnIE/" />
+<meta property="og:site_name" content="localStorageBugOnIE" />
+<script type="application/ld+json">
+{"name":"localStorageBugOnIE","description":null,"author":null,"@type":"WebSite","url":"https://sunhuawei.github.io/localStorageBugOnIE/","image":null,"publisher":null,"headline":"localStorage Bug on IE","dateModified":null,"datePublished":null,"sameAs":null,"mainEntityOfPage":null,"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link href="/localStorageBugOnIE/assets/css/style.css?v=259c416dd3b28260cea1edcd902952761d011b54" rel="stylesheet">
+  </head>
+  <body>
+    <script type="text/javascript">
+function _setItem(key, value) {
+  localStorage.constructor.prototype.setItem.call(localStorage, key, value);
+}
+
+function _getItem(key) {
+  return localStorage[key];
+}
+
+function _clearAll() {
+  localStorage.constructor.prototype.clear.call(localStorage);
+}
+
+function assert(condition, warning) {
+  if (condition) {
+    console.log('Test OK', warning);
+  } else {
+    console.error(warning);
+  }
+}
+
+function test(type) {
+  return function(funName) {
+    var fn = _getItem(funName);
+    assert(typeof fn === type, 'localStorage.' + funName + ' should be a ' + type);
+    _setItem(funName, '__changed__');
+    fn = _getItem(funName);
+    assert(typeof fn === type, 'after set, localStorage.' + funName + ' should still be a ' + type);
+  }
+}
+
+var fns = 'getItem|key|setItem|removeItem|clear'.split('|');
+
+for(var i = 0; i < fns.length; i++) {
+  test('function')(fns[i]);
+}
+
+test('number')('length');
+
+_clearAll();
+    </script>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+        <h1><a href="https://sunhuawei.github.io/localStorageBugOnIE/">localStorageBugOnIE</a></h1>
+
+<p>Please open this page in IE, and open the console to see the error!</p>
+<p>Here is the test code:</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">_setItem</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">localStorage</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">setItem</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">_getItem</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">localStorage</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">_clearAll</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">localStorage</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">clear</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">assert</span><span class="p">(</span><span class="nx">condition</span><span class="p">,</span> <span class="nx">warning</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">condition</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Test OK'</span><span class="p">,</span> <span class="nx">warning</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">warning</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">test</span><span class="p">(</span><span class="nx">type</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">funName</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">fn</span> <span class="o">=</span> <span class="nx">_getItem</span><span class="p">(</span><span class="nx">funName</span><span class="p">);</span>
+    <span class="nx">assert</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">fn</span> <span class="o">===</span> <span class="nx">type</span><span class="p">,</span> <span class="s1">'localStorage.'</span> <span class="o">+</span> <span class="nx">funName</span> <span class="o">+</span> <span class="s1">' should be a '</span> <span class="o">+</span> <span class="nx">type</span><span class="p">);</span>
+    <span class="nx">_setItem</span><span class="p">(</span><span class="nx">funName</span><span class="p">,</span> <span class="s1">'__changed__'</span><span class="p">);</span>
+    <span class="nx">fn</span> <span class="o">=</span> <span class="nx">_getItem</span><span class="p">(</span><span class="nx">funName</span><span class="p">);</span>
+    <span class="nx">assert</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">fn</span> <span class="o">===</span> <span class="nx">type</span><span class="p">,</span> <span class="s1">'after set, localStorage.'</span> <span class="o">+</span> <span class="nx">funName</span> <span class="o">+</span> <span class="s1">' should still be a '</span> <span class="o">+</span> <span class="nx">type</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">fns</span> <span class="o">=</span> <span class="s1">'getItem|key|setItem|removeItem|clear'</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">'|'</span><span class="p">);</span>
+
+<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">fns</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">test</span><span class="p">(</span><span class="s1">'function'</span><span class="p">)(</span><span class="nx">fns</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+<span class="p">}</span>
+
+<span class="nx">test</span><span class="p">(</span><span class="s1">'number'</span><span class="p">)(</span><span class="s1">'length'</span><span class="p">);</span>
+
+<span class="nx">_clearAll</span><span class="p">();</span>
+</code></pre>
+</div>
+
+
+      
+      <div class="footer border-top border-gray-light mt-5 pt-3 text-right text-gray">
+        This site is open source. <a href="https://github.com/SunHuawei/localStorageBugOnIE/edit/master/docs/README.md">Improve this page</a>.
+      </div>
+      
+    </div>
+    <script src="/localStorageBugOnIE/assets/javascript/anchor-js/anchor.min.js"></script>
+    <script>anchors.add();</script>
+  </body>
+</html>
